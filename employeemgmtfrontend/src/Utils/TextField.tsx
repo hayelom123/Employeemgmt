@@ -1,17 +1,24 @@
-import { type } from "os";
-import React from "react";
-import { TextFieldStyle,InputBox } from "../styles/Textfield_style";
+
+import React, { useState } from "react";
+import { TextFieldStyle,InputBox ,ErrorSpan} from "../styles/Textfield_style";
 interface props{
     name: string,
     placeHolder: string,
     type:string,
     visible?: boolean,
+    error?:string,
     handleChange:(event:React.ChangeEvent<HTMLInputElement>) => void;
 }
-export const TextField: React.FC<props> = ({ name, placeHolder,handleChange,type }) => {
-   
+export const TextField: React.FC<props> = ({ name, placeHolder,handleChange,type,error }) => {
+    
+    const [oldType,setOldType] = useState(type);
     return (
         <InputBox>
-            <TextFieldStyle type={type} name={name} placeholder={placeHolder} onChange={ handleChange}/>
+            <TextFieldStyle type={oldType!="date"?type:"text"} name={name} placeholder={placeHolder} onFocus={e => {
+                if (oldType == "date") {
+                    setOldType("text");
+                }
+            }} onChange={handleChange} />
+            {error&&<ErrorSpan>{error}</ErrorSpan>}
         </InputBox>)
 }

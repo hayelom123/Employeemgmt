@@ -1,9 +1,9 @@
 export type user={
     Name: string;
     dateOfBirth?: string;
-    gender?: string;
-    salary?: number;
-    id:string,
+    gender: string;
+    salary: number;
+    _id:string,
 }
 
 interface storeType{

@@ -2,8 +2,7 @@ import styled from "styled-components";
 
 export const Form = styled.div`
   width: 400px;
-  height: 400px;
-  
+  height: 500px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   display: flex;

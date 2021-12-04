@@ -11,7 +11,7 @@ export interface UserAdded{
 }
 export interface deleteUser{
     type: ActionTypes.DELETE_USER,
-    payload:number
+    payload:string
 }
 export interface handle{
      type: string,

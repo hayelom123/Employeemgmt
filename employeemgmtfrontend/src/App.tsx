@@ -5,13 +5,21 @@ import routes from './route/routes';
 import { MainBody } from './styles/body_style';
 
 // import { SignIn } from './components/signin';
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { NavBar } from './Utils/topNavbar';
+import { GlobalStyle } from './styles/gloablstyle';
+
 const App: React.FC = () => {
   
   return (
-    <div className="App">
+    <>
+      <GlobalStyle/>
+    <div >
+      <Router>
+       <NavBar/>
       <MainBody>
-        <Router>
+       
+        
           <Routes>
             {
               routes.map(el => {
@@ -21,11 +29,12 @@ const App: React.FC = () => {
     
    
   </Routes>
-</Router>
+
      {/* <SignIn></SignIn> */}
      </MainBody>
-      
+      </Router>
     </div>
+    </>
   );
 }
 

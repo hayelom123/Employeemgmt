@@ -3,10 +3,10 @@ import { addUserAction, deleteUserAction } from "../types/actionCreatorTypes";
 
 
 
-export const deleteuserActionCreator: deleteUserAction = (index) => {
+export const deleteuserActionCreator: deleteUserAction = (_id) => {
     return {
    type: ActionTypes.DELETE_USER,
-    payload:index
+    payload:_id
     }
 }
 export const addUserActionCreator: addUserAction = (payload) => {
