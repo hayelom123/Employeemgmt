@@ -2,19 +2,22 @@ import styled from "styled-components";
 export const Table = styled.table`
   border-collapse: collapse;
   width: 100%;
+  margin: 5px auto;
   th,
   td {
     text-align: left;
     padding: 8px;
   }
-
+  thead {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
   tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
     font-size: 1.2em;
   }
   tr:nth-child(odd) {
-    background-color: rgba(0, 0, 0, 0.2);
     font-size: 1.2em;
+    background-color: rgba(255, 255, 255, 0.2);
   }
   .button {
     background-color: #4caf50; /* Green */
