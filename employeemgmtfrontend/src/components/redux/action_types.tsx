@@ -5,4 +5,6 @@ export enum ActionTypes {
   DELETE_USER = "DELETE_USER",
   EDIT_USER = "EDIT_USER",
   USER_ADDED = "USER_ADDED", // local update
+  LogIn_STATE = "LogIn_STATE",
+  ERROR_OCCURED = "ERROR_OCCURED",
 }

@@ -3,28 +3,40 @@ import { call, put, takeLatest, StrictEffect } from "redux-saga/effects";
 import { ActionTypes } from "../action_types";
 import userApi from "../api/userApi";
 import { AxiosResponse } from "axios";
+import cookie from "react-cookies";
 // import { userInterface } from "./reducer";
 import {
   addUser,
   UserAdded,
   deleteUser,
+  editUser,
   getEmployess,
   goTEmployess,
+  Login,
 } from "../types/action_types";
+let token;
 function* mySaga(): Generator<StrictEffect> {
   yield takeLatest(ActionTypes.ADD_USER, addNewUserWorker);
   yield takeLatest(ActionTypes.DELETE_USER, deleteUserWorker);
   yield takeLatest(ActionTypes.Get_Users_Fetch, getListOfEmployees);
+  yield takeLatest(ActionTypes.EDIT_USER, editUserSaga);
 }
 
 function* getListOfEmployees({ page }: getEmployess) {
-  console.log("getting users");
+  console.log("getting users", cookie.load("user")["token"]);
   try {
     console.log("sennnnnnnnnnnnnnndig:", page);
     //addDataToServer(payload)
     const response: AxiosResponse = yield call(
       userApi.post,
-      "/get-all-employees"
+      "/get-all-employees",
+      {},
+      {
+        headers: {
+          token: cookie.load("user")["token"],
+          //   token: cookie.load("user")["token"],
+        },
+      }
     );
     console.log(response);
     if (response.status == 200) {
@@ -33,71 +45,135 @@ function* getListOfEmployees({ page }: getEmployess) {
         type: ActionTypes.Got_users,
         payload: response.data,
       };
-      console.log("reaches here");
       yield put(data);
     }
   } catch (e) {
-    console.log(e);
+    yield put({
+      type: ActionTypes.ERROR_OCCURED,
+      error: {
+        message: "fetch data failed ",
+        id: ActionTypes.Get_Users_Fetch,
+        failed: true,
+        open: true,
+      },
+    });
   }
 }
 function* addNewUserWorker({ payload }: addUser) {
-  //send to server requist
   try {
-    console.log("sennnnnnnnnnnnnnndig:", payload);
-    //addDataToServer(payload)
     const response: AxiosResponse = yield call(
       userApi.post,
       "/add-new-employee",
       {
         ...payload,
+      },
+      {
+        headers: {
+          token: cookie.load("user")["token"],
+        },
       }
     );
-    console.log(response);
+
     if (response.status == 200) {
-      console.log("getting started");
-      //   const data: UserAdded = {
-      //     type: ActionTypes.USER_ADDED,
-      //     payload: response.data,
-      //   };
-      //   console.log("reaches here");
-      //   yield put(data);
+      yield put({
+        type: ActionTypes.ERROR_OCCURED,
+        error: {
+          message: "succesfully Registered ",
+          id: ActionTypes.ADD_USER,
+          failed: false,
+          open: true,
+        },
+      });
     }
   } catch (e) {
-    console.log(e);
+    yield put({
+      type: ActionTypes.ERROR_OCCURED,
+      error: {
+        message: "failed to register ",
+        id: ActionTypes.ADD_USER,
+        failed: true,
+        open: true,
+      },
+    });
   }
 }
 function* deleteUserWorker({ payload }: deleteUser) {
   try {
-    console.log("dddddddddddddddddddddddddddd");
-
-    try {
-      const response: AxiosResponse = yield call(
-        userApi.post,
-        "/delete-employee",
-        {
-          id: payload,
-        }
-      );
-      console.log(response);
-      if (response.status == 200) {
-        console.log("getting started");
-        // const data: UserAdded = {
-        //   type: ActionTypes.USER_ADDED,
-        //   payload: response.data,
-        // };
-        // console.log("reaches here");
-        // yield put(data);
+    const response: AxiosResponse = yield call(
+      userApi.post,
+      "/delete-employee",
+      {
+        id: payload,
+      },
+      {
+        headers: {
+          token: cookie.load("user")["token"],
+        },
       }
-    } catch (e) {
-      console.log(e);
+    );
+    console.log(response);
+    if (response.status == 200) {
+      yield put({
+        type: ActionTypes.ERROR_OCCURED,
+        error: {
+          message: "succesfully Deleted ",
+          id: ActionTypes.DELETE_USER,
+          failed: false,
+          open: true,
+        },
+      });
     }
-    // const data: deleteUser = {
-    //   type: ActionTypes.DELETE_USER,
-    //   payload: payload,
-    // };
-    //   yield put(data);
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    yield put({
+      type: ActionTypes.ERROR_OCCURED,
+      error: {
+        message: "failed To Delete",
+        id: ActionTypes.DELETE_USER,
+        failed: true,
+        open: true,
+      },
+    });
   }
+}
+function* editUserSaga({ payload }: editUser) {
+  try {
+    const response: AxiosResponse = yield call(
+      userApi.post,
+      "/edit-employee",
+      {
+        ...payload,
+      },
+      {
+        headers: {
+          token: cookie.load("user")["token"],
+        },
+      }
+    );
+    console.log(response);
+    if (response.status == 200) {
+      yield put({
+        type: ActionTypes.ERROR_OCCURED,
+        error: {
+          message: "succesfully Edited ",
+          id: ActionTypes.EDIT_USER,
+          failed: false,
+          open: true,
+        },
+      });
+    }
+  } catch (e) {
+    yield put({
+      type: ActionTypes.ERROR_OCCURED,
+      error: {
+        message: "Edditing Failed! ",
+        id: ActionTypes.EDIT_USER,
+        failed: true,
+        open: true,
+      },
+    });
+  }
+}
+function* changeLoginState({ login }: Login) {
+  console.log("LOgin Status:", login);
 }
 export default mySaga;

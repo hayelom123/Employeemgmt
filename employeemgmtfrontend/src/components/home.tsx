@@ -41,7 +41,7 @@ const Home: React.FC = () => {
             <th>No</th>
             <th>Name</th>
             <th>Gender</th>
-            <th>Date OF Birth</th>
+            <th>Date OF Birth(M/D/Y)</th>
             <th>Salary</th>
             <th></th>
             <th></th>
@@ -54,7 +54,11 @@ const Home: React.FC = () => {
                 <td>{index + 1}</td>
                 <td>{user.Name}</td>
                 <td>{user.gender}</td>
-                <td>{user.dateOfBirth}</td>
+                <td>
+                  {new Date(
+                    user.dateOfBirth ? user.dateOfBirth : "dec 2020-12-02"
+                  ).toLocaleDateString()}
+                </td>
                 <td>{user.salary}</td>
                 <td>
                   <button
@@ -84,22 +88,6 @@ const Home: React.FC = () => {
           })}
         </tbody>
       </Table>
-      {/* <ul>
-        {users.map((user, index) => (
-          <li key={index}>
-            {user.Name}
-            <Button
-              onClick={(
-                event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-              ) => {
-                onDelete(user._id);
-              }}
-            >
-              delete
-            </Button>
-          </li>
-        ))}
-      </ul> */}
     </div>
   );
 };

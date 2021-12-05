@@ -3,7 +3,10 @@ import { Button } from "../../styles/Button_styles";
 import { TextField } from "../../Utils/TextField";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store/store";
-import { addUserActionCreator } from "../redux/action/index";
+import {
+  addUserActionCreator,
+  edituserActionCreator,
+} from "../redux/action/index";
 import { Form } from "../../styles/form_style";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -20,9 +23,8 @@ const Edit: React.FC = () => {
     _id: string;
   }>({ Name: "", dateOfBirth: "", gender: "", salary: 0, _id: "" });
   useEffect(() => {
-    // const { Name, dateOfBirth, gender, salary, _id } = location.state;
-    setUser({ ...location.state });
-    console.log(location.state);
+    const { Name, dateOfBirth, gender, salary, _id } = location.state;
+    setUser({ Name, dateOfBirth, gender, salary, _id });
   }, []);
   const [userErrors, setUserErrors] = useState({
     Name: "",
@@ -47,7 +49,6 @@ const Edit: React.FC = () => {
       gender: Joi.string().required().label("Gender"),
       salary: Joi.number().min(5).required().label("Salary"),
       _id: Joi.string().required(),
-      __v: Joi.optional(),
     });
     const options = { abortEarly: false };
     return userSchema.validate(user, options); //Joi.validate(user, userSchema);
@@ -81,7 +82,7 @@ const Edit: React.FC = () => {
       setUserErrors({ ...temperror });
     } else {
       console.log("heeeeeeeeeeeerrrrrrrrrrrrrrrre");
-      //   dispatch(addUserActionCreator({ ...user}));
+      dispatch(edituserActionCreator({ ...user }));
       setUserErrors({ ...temperror });
     }
   };
@@ -148,7 +149,7 @@ const Edit: React.FC = () => {
             formValidate();
           }}
         >
-          Add
+          Save
         </Button>
       </Form>
     </div>
